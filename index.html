@@ -264,14 +264,62 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="Proxy"><a href="#Proxy" class="headerlink" title="Proxy"></a>Proxy</h3><p> Proxy用于修改某些操作的默认行为，等同于在语言层面做出修改，所以属于一种“元编程”（meta programming），即对编程语言进行编程。<br> Proxy 可以理解为在目标对象前假设一层“拦截”层，外界对改对象的访问必须想通过该层的拦截，因此提供了一种机制，可以对外界的访问<br> 进行过滤和改写。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">var obj = new Proxy(&#123;&#125;, &#123;</span><br><span class="line">  get: function(target, key, receiver) &#123;</span><br><span class="line">    console.log(`getting $&#123;kkey&#125;`);</span><br><span class="line">    return Reflect.get(target, key, receiver);</span><br><span class="line">  &#125;,</span><br><span class="line">  set: function(target, key, value, receiver) &#123;</span><br><span class="line">    return Reflect.set(target, key, value, receiver);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">// 对一个空对象做了一层拦截，重定义了属性的读（get）和设置（set）行为</span><br><span class="line">```  </span><br><span class="line"></span><br><span class="line">ES6 原生提供了Proxy的构造函数，用于生成Proxy实例。  </span><br><span class="line">`var proxy = new Proxy(target, handler)`  </span><br><span class="line">&gt; 参数target表示要拦截的目标对象，handler也是一个对象，用来定制拦截行为。  </span><br><span class="line"></span><br><span class="line">#### Proxy实例的方法</span><br><span class="line">get()    </span><br><span class="line">- 用于拦截某个属性的读取操作。get方法可以继承。</span><br><span class="line"></span><br><span class="line">set()  </span><br><span class="line">- 用于拦截某个属性的赋值操作</span><br></pre></td></tr></table></figure></p>
-<p>let validator = {<br>  set: function(obj, prop, value) {<br>    if(prop === ‘age’) {<br>      throw new Error(‘the age is not invalid’)<br>    }<br>    // 对于age以外属性都之际额保存<br>    obj[prop] = value;<br>  }<br>}</p>
-<p>let person = new Proxy({}, validator);</p>
-<p>person.age = 10;<br>person.age; // 10<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">apply()</span><br><span class="line">- 用于函数的调用、call、apply操作。</span><br><span class="line"></span><br><span class="line">has()   </span><br><span class="line">- 可以隐藏某些属性，不被in操作符发现。</span><br><span class="line"></span><br><span class="line">construct()   </span><br><span class="line">- 用于拦截new()命令。</span><br><span class="line"></span><br><span class="line">deleteProperty()   </span><br><span class="line">- 用于拦截delete操作，如果这个方法抛出错误或返回false，当前属性就无法被delete命令删除。  </span><br><span class="line"></span><br><span class="line">defineProperty()   </span><br><span class="line">- 方法拦截了Object.defineProperty操作。</span><br><span class="line"></span><br><span class="line">enumerate()   </span><br><span class="line">- enumerate方法用于拦截for...in 循环。  </span><br><span class="line"></span><br><span class="line">getOwnPropertyDescripter()   </span><br><span class="line">- 方法拦截了Object.getOwnPropertyDescriptor, 返回一个属性描述对象或undefined。</span><br><span class="line"></span><br><span class="line">getPrototype()   </span><br><span class="line">- 用于拦截Object.getPrototype运算符及其它一些方法。</span><br><span class="line"></span><br><span class="line">ownKeys()   </span><br><span class="line">- 用于拦截Object.keys()方法。</span><br><span class="line"></span><br><span class="line">isExtensible()</span><br><span class="line">- 用于拦截Object.isExtensible操作。</span><br><span class="line"></span><br><span class="line">preventExtension()、setPrototype() 均用于拦截对应的方法。</span><br><span class="line"></span><br><span class="line">#### Proxy.revocable()</span><br><span class="line">返回一个可取消的Proxy实例。</span><br></pre></td></tr></table></figure></p>
-<p>let target = {};<br>let handler = {};</p>
-<p>let {proxy, revoke } = Proxy.revocable(target, handler);</p>
-<p>proxy.foo = 123;<br>proxy.foo; // 123</p>
-<p>revoke();<br>proxy.foo; // Typeerror: Revoked<br><code>`</code></p>
+        <h3 id="Proxy"><a href="#Proxy" class="headerlink" title="Proxy"></a>Proxy</h3><p>Proxy用于修改某些操作的默认行为，等同于在语言层面做出修改，所以属于一种“元编程”（meta programming），即对编程语言进行编程。<br>Proxy 可以理解为在目标对象前假设一层“拦截”层，外界对改对象的访问必须想通过该层的拦截，因此提供了一种机制，可以对外界的访问<br>进行过滤和改写。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">var obj = new Proxy(&#123;&#125;, &#123;</span><br><span class="line">  get: function(target, key, receiver) &#123;</span><br><span class="line">    console.log(`getting $&#123;kkey&#125;`);</span><br><span class="line">    return Reflect.get(target, key, receiver);</span><br><span class="line">  &#125;,</span><br><span class="line">  set: function(target, key, value, receiver) &#123;</span><br><span class="line">    return Reflect.set(target, key, value, receiver);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line">// 对一个空对象做了一层拦截，重定义了属性的读（get）和设置（set）行为</span><br></pre></td></tr></table></figure></p>
+<p>ES6 原生提供了Proxy的构造函数，用于生成Proxy实例。<br><code>var proxy = new Proxy(target, handler)</code>  </p>
+<blockquote>
+<p>参数target表示要拦截的目标对象，handler也是一个对象，用来定制拦截行为。    </p>
+</blockquote>
+<h4 id="Proxy实例的方法"><a href="#Proxy实例的方法" class="headerlink" title="Proxy实例的方法"></a>Proxy实例的方法</h4><p>get()    </p>
+<ul>
+<li>用于拦截某个属性的读取操作。get方法可以继承。  </li>
+</ul>
+<p>set()  </p>
+<ul>
+<li>用于拦截某个属性的赋值操作  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">let validator = &#123;</span><br><span class="line">  set: function(obj, prop, value) &#123;</span><br><span class="line">    if(prop === &apos;age&apos;) &#123;</span><br><span class="line">      throw new Error(&apos;the age is not invalid&apos;)</span><br><span class="line">    &#125;</span><br><span class="line">    // 对于age以外属性都之际额保存</span><br><span class="line">    obj[prop] = value;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">let person = new Proxy(&#123;&#125;, validator);</span><br><span class="line"></span><br><span class="line">person.age = 10;</span><br><span class="line">person.age; // 10</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>apply()</p>
+<ul>
+<li>用于函数的调用、call、apply操作。</li>
+</ul>
+<p>has()   </p>
+<ul>
+<li>可以隐藏某些属性，不被in操作符发现。</li>
+</ul>
+<p>construct()   </p>
+<ul>
+<li>用于拦截new()命令。</li>
+</ul>
+<p>deleteProperty()   </p>
+<ul>
+<li>用于拦截delete操作，如果这个方法抛出错误或返回false，当前属性就无法被delete命令删除。  </li>
+</ul>
+<p>defineProperty()   </p>
+<ul>
+<li>方法拦截了Object.defineProperty操作。</li>
+</ul>
+<p>enumerate()   </p>
+<ul>
+<li>enumerate方法用于拦截for…in 循环。  </li>
+</ul>
+<p>getOwnPropertyDescripter()   </p>
+<ul>
+<li>方法拦截了Object.getOwnPropertyDescriptor, 返回一个属性描述对象或undefined。</li>
+</ul>
+<p>getPrototype()   </p>
+<ul>
+<li>用于拦截Object.getPrototype运算符及其它一些方法。</li>
+</ul>
+<p>ownKeys()   </p>
+<ul>
+<li>用于拦截Object.keys()方法。</li>
+</ul>
+<p>isExtensible()</p>
+<ul>
+<li>用于拦截Object.isExtensible操作。</li>
+</ul>
+<p>preventExtension()、setPrototype() 均用于拦截对应的方法。  </p>
+<h4 id="Proxy-revocable"><a href="#Proxy-revocable" class="headerlink" title="Proxy.revocable()"></a>Proxy.revocable()</h4><p>返回一个可取消的Proxy实例。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">let target = &#123;&#125;;</span><br><span class="line">let handler = &#123;&#125;;</span><br><span class="line"></span><br><span class="line">let &#123;proxy, revoke &#125; = Proxy.revocable(target, handler);</span><br><span class="line"></span><br><span class="line">proxy.foo = 123;</span><br><span class="line">proxy.foo; // 123</span><br><span class="line"></span><br><span class="line">revoke();</span><br><span class="line">proxy.foo; // Typeerror: Revoked</span><br></pre></td></tr></table></figure></p>
 <blockquote>
 <p>Proxy.revocable方法返回一个对象，其proxy属性是Proxy实例，revoke属性是一个函数，可以取消Proxy实例。</p>
 </blockquote>
@@ -480,76 +528,6 @@
 
 
   
-    <article id="postname-盒子模型" class="article article-type-postname  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/04/12/盒子模型/">盒子模型</a>
-    </h1>
-  
-
-        
-        <a href="/2018/04/12/盒子模型/" class="archive-article-date">
-  	<time datetime="2018-04-12T08:31:49.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-04-12</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="盒子类型分为标准盒子模型和怪异盒子模型"><a href="#盒子类型分为标准盒子模型和怪异盒子模型" class="headerlink" title="盒子类型分为标准盒子模型和怪异盒子模型"></a>盒子类型分为标准盒子模型和怪异盒子模型</h3><ul>
-<li>标准盒子模型：标准来自于w3c标准议案提出，盒子width = width(content width) + padding + border + margin;</li>
-<li>怪异盒子模型：来与低版本得IE浏览器，不过随着前端的发展越来越多的人发现怪异模型的诸多优点，开始使用怪异模型，所以说怪异模型并不代表其优劣性，只关乎名称，在合适的场景我们也可以合适地选择怪异模型进行开发。 盒子width = width + margin; 内容width = contentwidth + border + padding;</li>
-</ul>
-<h3 id="盒子相互间的转换"><a href="#盒子相互间的转换" class="headerlink" title="盒子相互间的转换"></a>盒子相互间的转换</h3><ul>
-<li>box-sizing: content-box(css2宽高对应内容宽高)/border-box(宽高包含边框和内边距)/inherit/padding-box</li>
-<li>大多时候在进行移动端开发时，因为适配屏幕变化的原因，所以我们会将width设置为100%，此时若为元素加上padding，就会挤大盒子，故建议，在初始化时设置box-sizing为boder-box</li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/04/12/盒子模型/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
     <article id="postname-修改hexo头像" class="article article-type-postname  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -611,6 +589,76 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2018/04/12/修改hexo头像/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="postname-盒子模型" class="article article-type-postname  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/04/12/盒子模型/">盒子模型</a>
+    </h1>
+  
+
+        
+        <a href="/2018/04/12/盒子模型/" class="archive-article-date">
+  	<time datetime="2018-04-12T08:31:49.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-04-12</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="盒子类型分为标准盒子模型和怪异盒子模型"><a href="#盒子类型分为标准盒子模型和怪异盒子模型" class="headerlink" title="盒子类型分为标准盒子模型和怪异盒子模型"></a>盒子类型分为标准盒子模型和怪异盒子模型</h3><ul>
+<li>标准盒子模型：标准来自于w3c标准议案提出，盒子width = width(content width) + padding + border + margin;</li>
+<li>怪异盒子模型：来与低版本得IE浏览器，不过随着前端的发展越来越多的人发现怪异模型的诸多优点，开始使用怪异模型，所以说怪异模型并不代表其优劣性，只关乎名称，在合适的场景我们也可以合适地选择怪异模型进行开发。 盒子width = width + margin; 内容width = contentwidth + border + padding;</li>
+</ul>
+<h3 id="盒子相互间的转换"><a href="#盒子相互间的转换" class="headerlink" title="盒子相互间的转换"></a>盒子相互间的转换</h3><ul>
+<li>box-sizing: content-box(css2宽高对应内容宽高)/border-box(宽高包含边框和内边距)/inherit/padding-box</li>
+<li>大多时候在进行移动端开发时，因为适配屏幕变化的原因，所以我们会将width设置为100%，此时若为元素加上padding，就会挤大盒子，故建议，在初始化时设置box-sizing为boder-box</li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/04/12/盒子模型/">展开全文 >></a>
         </p>
       
 
