@@ -8,14 +8,17 @@
   <link rel="dns-prefetch" href="http://yoursite.com">
   <title>Proxy | KANT LEE</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="article">
+  <meta name="description" content="ProxyProxy�����޸�ĳЩ������Ĭ����Ϊ����ͬ�������Բ��������޸ģ���������һ�֡�Ԫ��̡���meta programming�������Ա�����Խ��б�̡�Proxy �������Ϊ��Ŀ�����ǰ����һ�㡰���ء��㣬���ԸĶ���ķ��ʱ�����ͨ���ò�����أ�����ṩ��һ�ֻ��ƣ����Զ����ķ�">
+<meta property="og:type" content="article">
 <meta property="og:title" content="Proxy">
 <meta property="og:url" content="http://yoursite.com/2018/07/19/Proxy/index.html">
 <meta property="og:site_name" content="KANT LEE">
+<meta property="og:description" content="ProxyProxy�����޸�ĳЩ������Ĭ����Ϊ����ͬ�������Բ��������޸ģ���������һ�֡�Ԫ��̡���meta programming�������Ա�����Խ��б�̡�Proxy �������Ϊ��Ŀ�����ǰ����һ�㡰���ء��㣬���ԸĶ���ķ��ʱ�����ͨ���ò�����أ�����ṩ��һ�ֻ��ƣ����Զ����ķ�">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-07-19T07:05:38.856Z">
+<meta property="og:updated_time" content="2018-07-19T07:29:44.244Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Proxy">
+<meta name="twitter:description" content="ProxyProxy�����޸�ĳЩ������Ĭ����Ϊ����ͬ�������Բ��������޸ģ���������һ�֡�Ԫ��̡���meta programming�������Ա�����Խ��б�̡�Proxy �������Ϊ��Ŀ�����ǰ����һ�㡰���ء��㣬���ԸĶ���ķ��ʱ�����ͨ���ò�����أ�����ṩ��һ�ֻ��ƣ����Զ����ķ�">
   
     <link rel="alternative" href="/atom.xml" title="KANT LEE" type="application/atom+xml">
   
@@ -201,7 +204,23 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <h3 id="Proxy"><a href="#Proxy" class="headerlink" title="Proxy"></a>Proxy</h3><p>Proxy�����޸�ĳЩ������Ĭ����Ϊ����ͬ�������Բ��������޸ģ���������һ�֡�Ԫ��̡���meta programming�������Ա�����Խ��б�̡�<br>Proxy �������Ϊ��Ŀ�����ǰ����һ�㡰���ء��㣬���ԸĶ���ķ��ʱ�����ͨ���ò�����أ�����ṩ��һ�ֻ��ƣ����Զ����ķ���<br>���й��˺͸�д��   </p>
+<pre><code>var obj = new Proxy({}, {
+  get: function(target, key, receiver) {
+    console.log(`getting ${kkey}`);
+    return Reflect.get(target, key, receiver);
+  },
+  set: function(target, key, value, receiver) {
+    return Reflect.set(target, key, value, receiver);
+  }
+})
+
+// ��һ���ն�������һ�����أ��ض��������ԵĶ���get�������ã�set����Ϊ
+</code></pre><p>ES6 ԭ���ṩ��Proxy�Ĺ��캯������������Proxyʵ����<br><code>var proxy = new Proxy(target, handler)</code>  </p>
+<blockquote>
+<p>����target��ʾҪ���ص�Ŀ�����handlerҲ��һ��������������������Ϊ��  </p>
+</blockquote>
+
       
 
       

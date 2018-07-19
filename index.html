@@ -202,7 +202,23 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <h3 id="Proxy"><a href="#Proxy" class="headerlink" title="Proxy"></a>Proxy</h3><p>Proxy�����޸�ĳЩ������Ĭ����Ϊ����ͬ�������Բ��������޸ģ���������һ�֡�Ԫ��̡���meta programming�������Ա�����Խ��б�̡�<br>Proxy �������Ϊ��Ŀ�����ǰ����һ�㡰���ء��㣬���ԸĶ���ķ��ʱ�����ͨ���ò�����أ�����ṩ��һ�ֻ��ƣ����Զ����ķ���<br>���й��˺͸�д��   </p>
+<pre><code>var obj = new Proxy({}, {
+  get: function(target, key, receiver) {
+    console.log(`getting ${kkey}`);
+    return Reflect.get(target, key, receiver);
+  },
+  set: function(target, key, value, receiver) {
+    return Reflect.set(target, key, value, receiver);
+  }
+})
+
+// ��һ���ն�������һ�����أ��ض��������ԵĶ���get�������ã�set����Ϊ
+</code></pre><p>ES6 ԭ���ṩ��Proxy�Ĺ��캯������������Proxyʵ����<br><code>var proxy = new Proxy(target, handler)</code>  </p>
+<blockquote>
+<p>����target��ʾҪ���ص�Ŀ�����handlerҲ��һ��������������������Ϊ��  </p>
+</blockquote>
+
       
 
       
